@@ -1,0 +1,32 @@
+#passchangeinfo{
+     width: 75%;
+    height: 75px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: ghostwhite;
+    margin-top: 50px;
+    margin-left: 10%;
+}
+#passchangeinfo h5{
+    padding-top: 22px;
+    padding-left: 15px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+#update-button{
+    margin-top: 40px;
+    border: 1px solid darkorange;
+    border-radius: 5px;
+    background-color: white;
+    color: darkorange;
+    width: 150px;
+    height: 45px;
+    font-size: 12px;
+    font-weight: bold;
+}
+#update-button:hover{
+    background-color: goldenrod;
+    color: white;
+    border-color: goldenrod;
+}

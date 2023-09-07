@@ -1,0 +1,165 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+{{ product.name }}
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'js/productslider.js' %}"></script>
+    <script src="{% static 'js/imagezoom.js' %}"></script>
+<script>
+    function sepeteEkle() {
+        var id = {{ product.id }};
+        var urunAdi = "{{product.name}}"; // Örnek: Ürün adının olduğu bir <span> elementinin id'si "urun-adi" olsun.
+        var urunFiyati = "{{ product.price }}"; // Örnek: Ürün fiyatının olduğu bir <span> elementinin id'si "urun-fiyati" olsun.
+        var urunMarka = "{{ product.brand}}";
+        var urunResim = document.getElementById("product-img");
+        var srcValue = urunResim.src;
+        var size = document.getElementById('size').innerText;
+        var parsedPrice = parseFloat(urunFiyati.replace(",", "."));
+        $.ajax({
+    url: "/addtocart",
+    method: "POST",
+    data: { product_id: id,product_name:urunAdi,product_price:parsedPrice,
+            product_brand:urunMarka,product_image:srcValue,product_size:size,
+            csrfmiddlewaretoken:'{{ csrf_token }}'},
+    success: function(response) {
+      var countElement = document.getElementById('count');  // count elementini seçin
+        var element = document.getElementById('cartItem');
+        var buybutton = document.querySelector('.buybutton');
+        var cart = response.cart
+        var totalelement = document.getElementById('total');
+        var totalprice = 0;
+      countElement.innerHTML = cart.length.toString();  // count elementinin içeriğini güncel değerle değiştirin
+     if(cart.length===0) {
+        element.innerHTML = 'sepetiniz boştur';
+        buybutton.style.opacity = '0.5';
+        buybutton.style.pointerEvents = 'none';
+    }
+     else {
+         element.innerHTML = cart.map((items) => {
+            var {product_id,product_name, product_brand, product_price, product_image,product_size,quantity} = items;
+            var ParsedPrice = parseFloat(product_price);
+            totalprice += product_price;
+            return (
+               `<div class='cart-item'>
+                <div class='cart-item-products'>
+                 <div class="row-img">
+                   <img class="rowimg" src='${product_image}'>
+                 </div>
+                 <p style="font-size: 14px">${product_name}</p>
+                 <h2 id='product_price' data-product-id="${product_id}" data-product-size ="${product_size}" style="font-size:15px">${product_price} TL</h2>
+                 ` +
+                `<i class='fa-solid fa-trash' data-product-id="${product_id}" data-product-size="${product_size}" onclick="removecart(this)"></i>
+                 </div>`+
+                `
+                 <div class='size'>
+                 <h2 style='font-size:11px' >Beden: ${product_size}</h2>
+                 </div>
+                 <div class='cart-item-dash-plus'>
+                 <h2 id='quantity' style='font-size:11px'>Adet:</h2>
+                 <i class="bi bi-dash-square" data-product-id="${product_id}" data-product-size="${product_size}" onclick="dashsquarequantity(this)"></i>
+                 <p class='quantitycounter' data-product-id="${product_id}" data-product-size="${product_size}" style='font-size:16px'>${quantity}</p>
+                 <i class="bi bi-plus-square" data-product-id="${product_id}" data-product-size=${product_size} onclick="plussquarequantity(this)"></i>
+                 </div>
+                 </div>`
+
+
+
+            );
+
+        })
+        totalelement.innerHTML = `${parseFloat(totalprice.toFixed(2))} TL`;
+         buybutton.style.opacity = '1';
+        buybutton.style.pointerEvents = 'auto';
+     }
+
+    },
+    error: function(xhr, status, error) {
+      console.log("Hata: " + error); // İstek sırasında bir hata oluşursa konsola yazdırabilirsiniz
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var radios = document.getElementsByName("sizes");
+    var labelElements = document.querySelectorAll('label[for^="option"]');
+
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].addEventListener("change", function() {
+            var selectedId = this.id;
+            var selectedSize = "";
+
+            for (var j = 0; j < labelElements.length; j++) {
+                if (labelElements[j].htmlFor === selectedId) {
+                    selectedSize = labelElements[j].innerText;
+                    break;
+                }
+            }
+
+            document.getElementById('size').innerText = selectedSize;
+
+        });
+    }
+});
+
+</script>
+{% endblock %}
+{% block stylefile %}
+<link href="{% static "css/productslider.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+{% block content %}
+
+<div id="content-wrapper">
+		<div class="column">
+        <div id="img-container">
+            <div id="lens"></div>
+			<img id="featured" src="{{product.image.url}}">
+
+        </div>
+			<div id="slide-wrapper" >
+				<img id="slideLeft" class="arrow" src="{% static 'img/arrow-left.png' %}">
+
+				<div id="slider">
+					<img id="product-img" class="thumbnail active" src="{{product.image.url}}">
+                    {% for slider in images %}
+                    <img class="thumbnail" src="{{slider.image.url}}">
+                    {% endfor %}
+				</div>
+
+				<img id="slideRight" class="arrow" src="{% static 'img/arrow-right.png' %}">
+			</div>
+		</div>
+    <div align="center" class="column">
+			<h5 id="product-brand" style="color: lightslategray">{{ product.brand }}</h5>
+     <h1 id="product-name">{{ product.name }}</h1>
+     <br>
+     <h4 id="product-price" style="font-family: Roboto, sans-serif">₺{{ product.price }}</h4>
+     <br>
+     <h6 style="width: 200px">Beden: <span id="size">{{ product.bodysize.first.size }}</span></h6>
+     <br>
+     {% for bodysize in product.bodysize.all  %}
+         <input type="radio" class="btn-check" name="sizes" id="option{{ bodysize.id }}" autocomplete="off" {% if bodysize.size|lower == "s" %}checked
+         {% endif %} >
+         <label class="btn btn-secondary" for="option{{ bodysize.id }}">{{ bodysize.size }}</label>
+     {% endfor %}
+     <br>
+             <button  id="sepete-ekle-button" onclick="sepeteEkle()" class="btn btn-dark" style="margin-top: 40px;width: 150px;height: 50px">Sepete Ekle</button>
+
+		</div>
+
+
+
+	</div>
+
+
+
+
+
+
+
+
+    <footer style="margin-top: 650px">
+
+
+    </footer>
+{% endblock %}

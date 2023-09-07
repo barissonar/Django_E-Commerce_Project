@@ -1,0 +1,125 @@
+#headerone{
+    width: 75%;
+    height: 75px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: ghostwhite;
+    margin-top: 50px;
+    margin-left: 10%;
+}
+#headerone h5{
+    padding-top: 22px;
+    padding-left: 15px;
+    font-style: italic;
+    font-weight: bold;
+}
+#userinfocontainer{
+    width: 75%;
+    height: 550px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: ghostwhite;
+    margin-left: 10%;
+}
+#userinfocontainer label{
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 10px;
+
+}
+#firstandlastname{
+    display: flex;
+    align-items: center;
+    margin-top: 100px;
+    margin-left: 200px;
+    gap: 25px;
+}
+#firstandlastname label{
+    position: absolute;
+    margin-bottom: 75px;
+}
+
+#lastnamelabel{
+    margin-left: 325px;
+}
+#email{
+    margin-left: 200px;
+    margin-top: 40px;
+}
+#last_date{
+    margin-top: 200px;
+    margin-left: 50px;
+}
+#update-button{
+    position: absolute;
+    margin-top: 60px;
+    margin-left: 200px;
+    border: 1px solid darkorange;
+    border-radius: 5px;
+    background-color: white;
+    color: darkorange;
+    width: 625px;
+    height: 45px;
+    font-size: 12px;
+    font-weight: bold;
+}
+#update-button:hover{
+    background-color: goldenrod;
+    color: white;
+    border-color: goldenrod;
+}
+.alert-success,.alert-danger{
+    width: 75%;
+    height: 60px;
+    margin-left: 135px;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    display: none;
+}
+.alert-success p{
+    margin-left: 50px;
+    padding-bottom: 50px;
+    color: darkgreen;
+}
+.alert-danger p{
+    margin-left: 50px;
+    padding-bottom: 50px;
+    color: darkred;
+}
+#firstnameerror{
+    display: none;
+    border: 1px solid #e72121;
+    position: absolute;
+    margin-top: 75px;
+    margin-left: 1px;
+    width: 298px;
+    border-radius: 1px;
+    height: 25px;
+    background-color: #e72121;
+    color: white;
+    padding-left: 5px;
+}
+#lastnameerror{
+    display: none;
+    border: 1px solid #e72121;
+    position: absolute;
+    margin-top: 75px;
+    margin-left: 326px;
+    width: 298px;
+    border-radius: 1px;
+    height: 25px;
+    background-color: #e72121;
+    color: white;
+    padding-left: 5px;
+}
+#emailerror{
+    display: none;
+    border: 1px solid #e72121;
+    width: 625px;
+    border-radius: 1px;
+    height: 25px;
+    background-color: #e72121;
+    color: white;
+    padding-left: 5px;
+}

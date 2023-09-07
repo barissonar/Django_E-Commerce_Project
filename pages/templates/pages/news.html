@@ -1,0 +1,227 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block stylefile %}
+ <style>
+.card{
+    transition: all 0.5s;
+}
+    .card:hover{
+        transform: scale(1.15);
+    }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Listen for checkbox changes
+    $('input[type="checkbox"]').on('change', function() {
+        var brands = $('input[name="brands"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var colors = $('input[name="colors"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var bodysizes = $('input[name="bodysizes"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var gender = $('input[name="gender"]:checked').map(function() {
+            return this.value;
+        }).get();
+
+        // Change checkbox scroll to top start
+        window.scrollTo({top: 0, behavior: "smooth"});
+
+        // Call your view with AJAX
+        $.ajax({
+            url: '/yeni-gelenler',
+            method: 'POST',
+            data: {brandsjs: brands, colorsjs: colors,bodyjs:bodysizes,genderjs:gender,csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(data) {
+                var json = data
+                var newsproducts = document.getElementById('newsproducts');
+                var newsproductscounter = document.getElementById('newslentotalproduct');
+                var newsproductnotfound = document.getElementById('newsproductnotfound');
+                newsproducts.innerHTML = "";
+
+                if (json.filterproducts.length < 1) {
+                    newsproductscounter.innerHTML = json.filterproducts.length.toString();
+                newsproductnotfound.innerHTML = '<div style="width: 500px;font-size: 16px" class="alert alert-danger"  role="alert">Seçilen filtre özelliklerine uygun ürün bulunamadı.</div>';
+                } else {
+                    newsproductscounter.innerHTML = json.filterproducts.length.toString();
+                    newsproductnotfound.innerHTML = '';
+
+                 }
+
+                //JSON verilerini döngü ile gez
+
+                for (var i = 0; i < json.filterproducts.length; i++) {
+        var product = json.filterproducts[i];
+        var productHTML =
+
+        '<div id="topproducts-'+ product.id + '" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">'+
+    '<div class="card" style="width: 17rem;">'+
+            '<a href="'+product.gender__gender+'/'+product.subcategorie__categoriename+'/'+product.slug+'"><img style="height: 300px" src="/media/'+product.image+'" class="card-img-top" alt="..."></a>'+
+        '<div align="center" class="card-body">'+
+    '<h6 class="card-title">'+ product.name+'</h6>'+
+    '<p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">'+product.brand__brand+'</p>'+
+      '<p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺'+ product.price+'</p>'+
+  '</div>'+
+    '</div>'+
+'</div>';
+
+        newsproducts.innerHTML += productHTML; // Ürün bilgilerini ekle
+
+    }
+
+
+
+                }
+
+        });
+    });
+});
+</script>
+        <script>
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+  if (document.body.scrollTop > 140) {
+    document.getElementById("filterscroll").style.position = "fixed";
+    document.getElementById("filterscroll").style.top = "0";
+
+  }
+  else {
+      document.getElementById("filterscroll").style.position = "relative";
+    document.getElementById("filterscroll").style.top = "50";
+
+  }
+}
+</script>
+{% endblock %}
+{% block title %}
+     Yeni Ürünler
+    {% endblock %}
+{% block content %}
+
+ <h5 style="position: absolute;margin-left: 280px;margin-top: 100px">"Yeni Gelenler" kategorisinde toplamda <a id="newslentotalproduct">{{ totalproduct }}</a> ürün bulundu.</h5>
+    <div style="position: absolute;margin-left: 280px;margin-top: 150px" id="newsproductnotfound"> </div>
+<div id="filterscroll" style="float: left">
+     <form action="" method="post">
+    {% csrf_token %}
+    <h6>Marka</h6>
+    {% for brand in brandsfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ brand }}" id="{{ brand }}" name="brands">
+  <label class="form-check-label" for="{{ brand }}">
+      {{ brand }}
+  </label>
+</div>
+
+    {% endfor %}
+     <hr>
+    <h6>Renk</h6>
+     {% for color in colorsfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ color }}" id="{{ color }}" name="colors">
+  <label class="form-check-label" for="{{ color }}">
+      {{ color }}
+  </label>
+</div>
+    {% endfor %}
+     <hr>
+     <h6>Beden</h6>
+     {% for body in bodyfilter %}
+          <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ body }}" id="{{ body }}" name="bodysizes">
+  <label class="form-check-label" for="{{ body }}">
+      {{ body }}
+  </label>
+</div>
+     {% endfor %}
+     <hr>
+     <h6>Cinsiyet</h6>
+     <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="erkek" id="erkek" name="gender">
+  <label class="form-check-label" for="erkek">
+    Erkek
+  </label>
+</div>
+     <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="kadin" id="kadin" name="gender">
+  <label class="form-check-label" for="kadin">
+      Kadın
+  </label>
+</div>
+     <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="cocuk" id="cocuk" name="gender">
+  <label class="form-check-label" for="cocuk">
+    Çocuk
+  </label>
+</div>
+
+
+    </form>
+</div>
+
+
+<br><br>
+    <div id="newsproducts" style="margin-left: 235px;position:relative;top: 75px;">
+{% if manproducts %}
+
+{% for manproduct in manproducts %}
+<div style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">
+    <div class="card" style="width: 17rem;">
+        {% if manproduct.subcategorie.slug %}
+   <a href="{% url "manproductdetail_get" manproduct.subcategorie.slug manproduct.slug  %}"><img style="height: 300px" src="{{ manproduct.image.url }}" class="card-img-top" alt="..."></a>
+        {% else %}
+   <a href="{% url "manproductdetail_get" manproduct.topcategorie.slug manproduct.slug  %}"><img style="height: 300px" src="{{ manproduct.image.url }}" class="card-img-top" alt="..."></a>
+        {% endif %}
+        <div align="center" class="card-body">
+    <h6 class="card-title">{{ manproduct.name }}</h6>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{manproduct.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{manproduct.price}}</p>
+  </div>
+    </div>
+</div>
+    {% endfor %}
+
+
+{% endif %}
+    {% if womenproducts %}
+{% for womenproduct in womenproducts %}
+<div style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">
+    <div class="card" style="width: 17rem;">
+     {% if womenproduct.subcategorie.slug %}
+   <a href="{% url "womenproductdetail-get" womenproduct.subcategorie.slug womenproduct.slug  %}"><img style="height: 300px" src="{{ womenproduct.image.url }}" class="card-img-top" alt="..."></a>
+     {% else %}
+    <a href="{% url "womenproductdetail-get" womenproduct.topcategorie.slug womenproduct.slug  %}"><img style="height: 300px" src="{{ womenproduct.image.url }}" class="card-img-top" alt="..."></a>
+     {% endif %}
+        <div align="center" class="card-body">
+    <h6 class="card-title">{{ womenproduct.name }}</h6>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{womenproduct.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{womenproduct.price}}</p>
+  </div>
+    </div>
+</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if childproducts %}
+        {% for childproduct in childproducts %}
+    <div style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">
+    <div class="card" style="width: 17rem;">
+    {% if childproduct.subcategorie.slug %}
+   <a href="{% url "childproductdetail-get" childproduct.subcategorie.slug childproduct.slug  %}"><img style="height: 300px" src="{{ childproduct.image.url }}" class="card-img-top" alt="..."></a>
+    {% else %}
+    <a href="{% url "childproductdetail-get" childproduct.topcategorie.slug childproduct.slug  %}"><img style="height: 300px" src="{{ childproduct.image.url }}" class="card-img-top" alt="..."></a>
+    {% endif %}
+        <div align="center" class="card-body">
+    <h6 class="card-title">{{ childproduct.name }}</h6>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{childproduct.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{childproduct.price}}</p>
+  </div>
+    </div>
+</div>
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

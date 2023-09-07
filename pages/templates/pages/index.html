@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block title %}
+    {% if interfacesettings %}
+    {{ interfacesettings.title }}
+   {% else %}
+    Sayfa adını panelden giriniz.
+     {% endif %}
+
+{% endblock %}
+
+
+

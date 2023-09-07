@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block stylefile %}
+<link rel="stylesheet" href="{% static 'pages/css/passchange.css' %}">
+{% endblock %}
+{% block content %}
+    <div id="passchangeinfo"><h5>Şifre Değiştir</h5></div>
+    {% if form.non_field_errors %}
+    {{ form.non_field_errors }}
+    {% endif %}
+    <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form%}
+        <div align="center" style="margin-top: 40px">
+        <label for={{ field.id_for_label }}>{{ field.label }}</label>
+        <div style="width: 200px">
+        {{ field }}
+            {% if  field.errors %}
+            {{ field.errors }}
+            {% endif %}
+        </div>
+        </div>
+    {% endfor %}
+    <div align="center" >
+    <button id="update-button" type="submit">GÜNCELLE</button>
+        </form>
+    </div>
+{% endblock %}

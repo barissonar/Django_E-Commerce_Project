@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block stylefile %}
+<link rel="stylesheet" href="{% static 'pages/css/userinfo.css' %}">
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+  // Belirli düğmeye tıklama olayı dinleyici eklemek
+  $("#update-button").click(function() {
+    var first_name = $("#id_first_name").val();
+    var last_name = $("#id_last_name").val();
+    var email = $("#id_email").val();
+    $.ajax({
+      url: "/account/userinfo",
+      method: "POST",
+      data:{first_name:first_name,last_name:last_name,email:email,csrfmiddlewaretoken:'{{csrf_token}}'},
+      success: function(response) {
+          if (response.message === true){
+        $(".alert-danger").css('display', 'none');
+        $("#firstnameerror").css('display','none');
+        $("#lastnameerror").css('display','none');
+        $("#emailerror").css('display','none');
+        $(".alert-success").css('display', 'block');
+        setTimeout(function (){
+        $(".alert-success").css('display', 'none');
+        },3000);
+        }
+          else {
+               $(".alert-success").css('display', 'none');
+               $("#firstnameerror").css('display','none');
+               $("#lastnameerror").css('display','none');
+               $("#emailerror").css('display','none');
+               $(".alert-danger").css('display', 'block');
+               var responsedata = JSON.parse(response.message);
+               if(responsedata.first_name){
+                 $("#firstnameerror").html(`${responsedata.first_name}`);
+                 $("#firstnameerror").css('display','block');
+
+               }
+               if(responsedata.last_name){
+                 $("#lastnameerror").html(`${responsedata.last_name}`);
+                 $("#lastnameerror").css('display','block');
+               }
+               if(responsedata.email){
+                   $("#emailerror").html(`${responsedata.email}`);
+                 $("#emailerror").css('display','block');
+               }
+
+               setTimeout(function (){
+                   $(".alert-danger").css('display', 'none');
+                   },3000);
+
+
+          }
+
+      },
+      error: function() {
+        // AJAX sırasında bir hata oluştuğunda yapılacak işlemler
+        console.log("AJAX isteği başarısız oldu.");
+      }
+    });
+  });
+});
+
+</script>
+{% endblock %}
+{% block content %}
+<div id="headerone">
+    <h5>Kullanıcı Bilgilerim</h5>
+</div>
+    <br>
+
+<div class="alert alert-success" role="alert">
+    <p id="successmessage"><i class="bi bi-check-circle-fill"></i> Güncelleme İşlemi Başarılı.</p>
+</div>
+<div class="alert alert-danger" role="alert">
+    <p id="errormessage"><i class="bi bi-x-circle-fill"></i> Güncelleme İşlemi Başarısız.</p>
+</div>
+<div id="userinfocontainer">
+<form id="userinfoupdateform">
+<div id="firstandlastname">
+<label id="firstnamelabel" for="{{ userinfo.first_name.id_for_label }}">{{ userinfo.first_name.label }}</label>
+{{ userinfo.first_name }}
+<div id="firstnameerror"></div>
+
+<label id="lastnamelabel" for="{{ userinfo.last_name.id_for_label }}">{{ userinfo.last_name.label }}</label>
+{{ userinfo.last_name }}
+<div id="lastnameerror"></div>
+    </div>
+    <div id="email">
+<label for="{{ userinfo.email.id_for_label }}">{{ userinfo.email.label }}</label>
+{{ userinfo.email }}
+<div id="emailerror"></div>
+        </div>
+        <button id="update-button" type="button">GÜNCELLE</button>
+    </form>
+<div id="last_date">
+    <p><i class="bi bi-shield-fill-check"></i> Son Giriş Tarihi: <span style="color: red">{{last_login}}</span></p>
+</div>
+</div>
+
+<br>
+    <br>
+{% endblock %}

@@ -1,0 +1,141 @@
+.orderhistorycart{
+    color: black;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    width: 90%;
+    min-height: 225px;
+
+
+
+}
+.allcart{
+    margin-top: 60px;
+
+}
+#topdetail{
+    border-bottom: 1px solid lightgray;
+    background-color: ghostwhite;
+    margin-top: 1px;
+    display: flex;
+    gap: 60px;
+    height: 65px;
+}
+.headersix{
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #616161;
+    font-weight: bold;
+
+}
+.headerandorder p,.headerandorderprice p{
+    position: absolute;
+    margin-left: 20px;
+    font-size: 12px;
+
+
+
+}
+.items{
+
+    width: 93%;
+    height: 120px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
+.item-image{
+    border: 2px solid lightgray;
+    width: 110px;
+    height: 100%;
+    border-radius: 5px;
+    margin-right: 100%;
+    padding: 5px;
+
+
+}
+.item-image img{
+    width: 90px;
+    height: 100%;
+}
+.item-name{
+    position: absolute;
+    width: content-box;
+    margin-left: 130px;
+    margin-bottom: 200px;
+
+}
+.item-name{
+    font-size: 14px;
+    padding-top: 5px;
+}
+.product-brand {
+    font-weight: bold;
+    color: #424242;
+}
+.product-brand span{
+   font-weight: normal;
+
+
+}
+.item-size{
+    position: absolute;
+    margin-left: 131px;
+    margin-top: 42px;
+    font-size: 13px;
+    color: #757575;
+    font-family: "Droid Serif";
+}
+.allitems{
+    padding-bottom: 20px;
+}
+.headerandorderprice {
+    margin-left: 70px;
+}
+.headerandorderprice p {
+    margin-left: 20px;
+}
+.orderdetailbutton{
+    width: 100px;
+    height: 30px;
+    background-color: darkorange;
+    margin-left: 50px;
+    margin-top: 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    border: 1px solid darkorange;
+
+}
+.orderdetailbutton:hover{
+    opacity: 0.7;
+}
+.pageinfo{
+    display: flex;
+    width: 80%;
+    height: 100px;
+    font-size: 23px;
+    font-style: italic;
+    font-weight: bold;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: ghostwhite;
+    margin-left: 10%;
+    margin-top: 50px;
+    gap: 135px;
+
+}
+.pageinfo p{
+    margin-top: 35px;
+    margin-left: 20px;
+
+}
+.pageinfo select{
+    width: 200px;
+    height: 40px;
+    margin-left: 150px;
+    font-size: 12px;
+    margin-top: 50px;
+}

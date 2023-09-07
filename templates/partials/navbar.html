@@ -1,0 +1,114 @@
+{% load static %}
+<nav {% if interfacesettings.navbarcolor %}
+    style="background-color: {{ interfacesettings.navbarcolor }}"
+    {% endif %}   class="navbar navbar-expand-lg">
+  <div class="container-fluid" style="height: 70px;font-size: 20px;word-spacing: 15px">
+    <a class="navbar-brand" href="{% url "index" %}">{% if interfacesettings%}{{ interfacesettings.webpagename }}
+    {% else %}
+        Sayfaismi
+    {% endif %}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div style="margin-top: 4px" class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'news' %}"style="margin-right: 10px;margin-left: 5px">Yeni</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-item">
+          <a class="nav-link dropdown-toggle" data-bs-auto-close="outside" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Erkek
+          </a>
+              </a>
+            <!--Erkek Kategoriler-->
+            <ul class="dropdown-menu" style="word-spacing: 0px">
+
+            <li>{% include 'partials/mandroprightbutton.html' %}</li>
+
+
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-auto-close="outside" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Kadın
+          </a>
+          <ul class="dropdown-menu" style="word-spacing: 0px">
+            <li>{% include 'partials/womendroprightbutton.html' %}</li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-auto-close="outside" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Çocuk
+          </a>
+          <ul class="dropdown-menu" style="word-spacing: 0px">
+              <li>{% include 'partials/childdroprightbutton.html' %}</li>
+
+          </ul>
+
+        </li>
+
+          {% if not user.is_authenticated %}
+          <li class="nav-item" style="margin-left: 600px">
+              <a class="nav-link active" aria-current="page" href="{% url 'userlogin' %}"><img src="{% static 'pages/login.png' %}" title="Giriş Yap" style="height: 25px"></a>
+        </li>
+
+              {% elif user.is_authenticated %}
+              <li style="position: relative;margin-left: 470px;word-spacing: 0px;font-size: 20px;font-style: italic">
+                <a class="nav-link active" aria-current="page" href="#">Merhaba, {{ user.first_name }}</a>
+              </li>
+               <li class="nav-item" style="margin-left: 20px;">
+               <!-- Example single danger button -->
+<!-- Example single danger button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   <img style="height: 25px" src="{% static "pages/settings.png" %}">
+  </button>
+  <div class="dropdown-menu" style="word-spacing: 0px">
+    <a style="font-size: 14px" class="dropdown-item" href="{% url "orderhistory" %}"><i class="bi bi-box"></i> Sipariş Geçmişi</a>
+    <div class="dropdown-divider"></div>
+    <a style="font-size: 14px" class="dropdown-item" href="{% url "userinfo" %}"><i class="bi bi-person"></i> Kullanıcı Bilgilerim</a>
+    <div class="dropdown-divider"></div>
+    <a style="font-size: 14px" class="dropdown-item" href="{% url "passchange" %}"><i class="bi bi-lock"></i> Şifre Değiştir</a>
+    <div class="dropdown-divider"></div>
+    <a style="font-size: 14px" class="dropdown-item" href="{% url "logout" %}"><i class="bi bi-box-arrow-right"></i> Çıkış Yap</a>
+  </div>
+</div>
+          {% endif %}
+
+              <li  class="nav-item" style="margin-left: 15px">
+              <div  style="cursor: pointer;background-color: {% if interfacesettings.navbarcolor %}
+                  {{ interfacesettings.navbarcolor }}
+                  {% else %}
+                  white;
+              {% endif %}"   class="cart"><i class="fa-solid fa-cart-shopping"></i><p id="count">{{ cartcount }}</p></div>
+
+              </li>
+
+        <div class="container"  style="position: absolute;margin-left: 790px;margin-top: 50px">
+    <div class="sidebar">
+        <div class="head"><p>Sepetim</p></div>
+        <div id="cartItem">
+
+        </div>
+
+    </div>
+            <div class="foot">
+            <h6 id="totalheader">Toplam</h6>
+            <h6 id="total">0.00 TL</h6>
+        </div>
+            <div class="buycontainer">
+
+                <div class="buybutton">
+                    <a href="{% url "buycart" %}">Satın AL</a>
+                    </div>
+                </div>
+
+    </div>
+
+
+      </ul>
+
+    </div>
+  </div>
+</nav>

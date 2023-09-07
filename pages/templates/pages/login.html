@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="position-absolute top-50 start-50 translate-middle" style="width: 400px">
+<form action="" method="post" novalidate>
+{% csrf_token %}
+{% for nonfielderror in form.non_field_errors %}
+    <div class="bg-danger">*Hata!</div>{{ nonfielderror }}
+{% endfor %}
+<h2 style="font-style: italic;margin-left: 125px">Giriş Yap</h2>
+
+    <label style="font-size: 17px" for="e-posta">E-Posta</label>
+   {{ form.username }}
+    <div class="bg-danger">{{ form.username.errors }}</div>
+    <label style="font-size: 17px" for="parola">Parola</label>
+   {{ form.password }}
+    <div class="bg-danger">{{ form.password.errors }}</div>
+
+<button class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-dark rounded-pill" style="width: 400px;height: 50px;font-size: 19px;margin-top: 300px" type="submit">Giriş Yap</button>
+
+
+</form>
+    <a href="{% url 'userregister' %}">
+    <button class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-dark rounded-pill" style="width: 100px;height: 50px;font-size: 15px;margin-top: 380px" type="button">Kayıt Ol</button>
+    </a>
+    </div>
+
+{% endblock %}

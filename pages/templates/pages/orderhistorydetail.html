@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block stylefile %}
+<link rel="stylesheet" href="{% static 'pages/css/orderhistorydetail.css' %}">
+{% endblock %}
+{% block content %}
+<div class="orderdetailinfo">
+    <p>Sipariş Detayı</p>
+    <div class="headerandorderdetailinfo">
+        <h5>Sipariş Tarihi</h5>
+        <h6>{{ order.date}}</h6>
+    </div>
+    <div class="headerandorderdetailinfo">
+        <h5>Sipariş No</h5>
+        <h6>{{ order.pk }}</h6>
+    </div>
+<div class="headerandorderdetailinfo">
+        <h5>Sipariş Özeti</h5>
+        <h6>{{ order.orderdetail.all|length }} Ürün</h6>
+    </div>
+<div class="headerandorderdetailinfo">
+    <a href="{% if order.invoice %}{{ order.invoice.url }} {% endif %}">
+    <button class="invoicebutton" type="button"><i class="fa-solid fa-file-invoice" style="color: orange"></i>
+        <span style="font-weight: bold">Fatura Görüntüle</span></button>
+        </a>
+    </div>
+</div>
+
+    <div class="allitemscart">
+    {% for orderdetail in order.orderdetail.all %}
+    <div class="itemscart">
+    <div class="items-image-div">
+        <img class="items-image" src="{{ orderdetail.product.image.url }}">
+    </div>
+        <div class="product-brand-name">
+            <p>{{ orderdetail.product.brand.brand }} <span>{{ orderdetail.product.name}}</span></p>
+        </div>
+        <div class="product-color-bodysize">
+            <p>Beden: {{ orderdetail.product.color.color }}, {{ orderdetail.size}} - Adet:{{ orderdetail.quantity }}</p>
+        </div>
+        <div class="product-price">
+            {{ orderdetail.price}}
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+<div class="orderadressandpayment">
+
+    <div class="orderadress">
+    <div class="orderadress-header">
+        <h6>Teslimat Bilgileri</h6>
+    </div>
+    <div class="orderadress-body">
+        <p>Teslimat Adresi</p>
+        <div class="orderadress-info">
+            <h6 class="orderadress-name">{{ order.name}} {{ order.surname }}</h6>
+            <p class="adresss">{{ order.address }}</p>
+            <p>{{ order.district|capfirst }} <span style="font-family: 'Book Antiqua';color: #757575">{{ order.postcode }}</span> / {{ order.province|capfirst }}</p>
+        </div>
+    </div>
+    </div>
+
+
+     <div class="orderpayment">
+    <div class="orderpayment-header">
+        <h6>Ödeme Bilgileri</h6>
+        <p><i class="fa-regular fa-credit-card"></i>  ****{{ order.paymentinformation.cartnumber|slice:"-4:" }} - Tek Çekim</p>
+    </div>
+    <div class="orderpayment-body">
+        <div class="producttotal">
+        <p>Ürün Toplamı <span class="prototaltext">{{ order.paymentinformation.totalprice}} TL</span></p>
+            </div>
+        <div class="cargototal">
+        <p>Kargo Tutarı <span class="cartotaltext">0 TL</span></p>
+            </div>
+        <div class="total">
+        <h6>Toplam</h6>
+            <h6>{{ order.paymentinformation.totalprice}} TL</h6>
+            </div>
+    </div>
+    </div>
+
+
+    </div>
+    <br>
+    <br>
+
+{% endblock %}

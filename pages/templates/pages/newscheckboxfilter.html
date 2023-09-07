@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block stylefile %}
+ <style>
+.card{
+    transition: all 0.5s;
+}
+    .card:hover{
+        transform: scale(1.15);
+    }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Listen for checkbox changes
+    $('input[type="checkbox"]').on('change', function() {
+        var brands = $('input[name="brands"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var colors = $('input[name="colors"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var bodysizes = $('input[name="bodysizes"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var gender = $('input[name="gender"]:checked').map(function() {
+            return this.value;
+        }).get();
+
+
+        // Change checkbox scroll to top start
+        window.scrollTo({top: 0, behavior: "smooth"});
+
+        // Call your view with AJAX
+        $.ajax({
+            url: {% block ajaxtopposturl %}{% endblock %},
+            method: 'POST',
+            data: {brandsjs: brands, colorsjs: colors,bodyjs:bodysizes,csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(data) {
+                var json = data
+                var topproducts = document.getElementById('topproducts');
+                var topproductcounter = document.getElementById('toplentotalproduct');
+                var topproductnotfound = document.getElementById('topproductnotfound');
+                topproducts.innerHTML = "";
+
+                if (json.filterproducts.length < 1) {
+                    topproductcounter.innerHTML = json.filterproducts.length.toString();
+                topproductnotfound.innerHTML = '<div style="width: 500px;font-size: 16px" class="alert alert-danger"  role="alert">Seçilen filtre özelliklerine uygun ürün bulunamadı.</div>';
+                } else {
+                    topproductcounter.innerHTML = json.filterproducts.length.toString();
+                    topproductnotfound.innerHTML = '';
+
+                 }
+
+                //JSON verilerini döngü ile gez
+
+                for (var i = 0; i < json.filterproducts.length; i++) {
+        var product = json.filterproducts[i];
+        var productHTML =
+
+        '<div id="topproducts-'+ product.id + '" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">'+
+    '<div class="card" style="width: 17rem;">'+
+            '<a href="'+json.categoriename+'/'+product.slug+'"><img style="height: 300px" src="/media/'+product.image+'" class="card-img-top" alt="..."></a>'+
+        '<div align="center" class="card-body">'+
+    '<h6 class="card-title">'+ product.name+'</h6>'+
+    '<p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">'+product.brand__brand+'</p>'+
+      '<p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺'+ product.price+'</p>'+
+  '</div>'+
+    '</div>'+
+'</div>';
+
+        topproducts.innerHTML += productHTML; // Ürün bilgilerini ekle
+
+    }
+
+
+
+                }
+
+        });
+    });
+});
+</script>
+{% endblock %}
+{% block title %}
+     Yeni Ürünler
+    {% endblock %}
+{% block content %}
+
+
+     <div style="width: 150px;height: 400px" id="filterscroll">
+     <form action="" method="post">
+    {% csrf_token %}
+    <h6>Marka</h6>
+    {% for brand in brandsfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ brand }}" id="{{ brand }}" name="brands" {% if brand in brands%}
+  checked
+  {% endif %} >
+  <label class="form-check-label" for="{{ brand }}">
+      {{ brand }}
+  </label>
+</div>
+    {% endfor %}
+    <h6>Renk</h6>
+     {% for color in colorsfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ color }}" id="{{ color }}" name="colors" {% if color in colors %}
+         checked
+  {% endif %}>
+  <label class="form-check-label" for="{{ color }}">
+      {{ color }}
+  </label>
+</div>
+    {% endfor %}
+     <h6>Kategori</h6>
+     <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="erkek" id="erkek" name="gender" {% if "erkek" in gender %}
+  checked
+  {% endif %} >
+  <label class="form-check-label" for="erkek">
+    Erkek
+  </label>
+</div>
+     <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="kadin" id="kadin" name="gender" {% if "kadin" in gender %}
+  checked
+  {% endif %} >
+  <label class="form-check-label" for="kadin">
+      Kadın
+  </label>
+</div>
+      <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="cocuk" id="cocuk" name="gender" {% if "cocuk" in gender %}
+  checked
+  {% endif %} >
+  <label class="form-check-label" for="cocuk">
+    Çocuk
+  </label>
+</div>
+
+    <br>
+        <button title="Filtrele" class="btn btn-secondary" type="submit"><img style="height: 25px;width: 30px" src="{% static 'pages/filter.png' %}"></button>
+
+    </form>
+     </div>
+<br><br>
+{% if filterproducts %}
+{% for filterproduct in filterproducts %}
+<div style="display: inline-block;margin-left: 100px;margin-top: 130px">
+    <div class="card" style="width: 17rem;">
+        {% if filterproduct.gender == "erkek" %}
+   <a href="{% url "manproductdetail-get" filterproduct.subcategorie.url filterproduct.url  %}"><img src="{{ filterproduct.image.url }}" class="card-img-top" alt="..."></a>
+        {% elif filterproduct.gender == "kadin" %}
+   <a href="{% url "womenproductdetail-get" filterproduct.subcategorie.url filterproduct.url  %}"><img src="{{ filterproduct.image.url }}" class="card-img-top" alt="..."></a>
+        {% elif filterproduct.gender == "cocuk" %}
+            <a href="{% url "childproductdetail-get" filterproduct.subcategorie.url filterproduct.url  %}"><img src="{{ filterproduct.image.url }}" class="card-img-top" alt="..."></a>
+        {% endif %}
+  <div align="center" class="card-body">
+    <h4 class="card-title">{{ filterproduct.name}}</h4>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{filterproduct.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{filterproduct.price}}</p>
+  </div>
+    </div>
+</div>
+    {% endfor %}
+
+{% endif %}
+
+<footer style="margin-top: 500px">
+</footer>
+
+{% endblock %}

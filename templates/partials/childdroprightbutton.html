@@ -1,0 +1,27 @@
+<!-- Split dropend button -->
+{%for childtopcategorie in childcategories%}
+<div class="btn-group dropend">
+<a style="color: black" href="{% url "childcategories-get" childtopcategorie.slug %}">
+  <button type="button" class="btn btn-outline">
+   {{ childtopcategorie.categoriename }}
+  </button>
+</a>
+
+  <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden"></span>
+  </button>
+<ul class="dropdown-menu">
+    {% for childsubcategorie in childtopcategorie.children.all %}
+        {% for gender in childsubcategorie.gender.all %}
+              {% if gender.id == 3 %}
+    <!-- Dropdown menu links -->
+      <a class="dropdown-item" href="{% url "childcategories-get" childsubcategorie.slug %}">{{childsubcategorie.categoriename}}</a>
+              {% endif %}
+            {% endfor %}
+        {% endfor %}
+  </ul>
+
+
+</div>
+
+{% endfor %}

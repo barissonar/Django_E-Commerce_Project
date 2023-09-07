@@ -1,0 +1,227 @@
+.containerbuycart {
+    display: flex;
+    justify-content: center;
+    width: 47%;
+    height: 100%;
+    position: fixed;
+    margin-left: 53%;
+    background-color: whitesmoke;
+}
+
+.sidebarbuycart {
+    width: 100%;
+    padding: 20px;
+}
+
+.headbuycart {
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+#cartItembuycart {
+    margin-bottom: 20px;
+    overflow-y: scroll;
+    height: 350px;
+}
+
+.cart-itembuycart {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.cart-itembuycart h2 {
+    margin-left: auto;
+    text-align: end;
+    min-width: 100px;
+    margin-right: 10px;
+}
+
+.row-imgbuycart {
+    margin-right: 10px;
+}
+
+.rowimgbuycart {
+    width: 65px;
+    height: 65px;
+}
+
+#product_quantitybuycart {
+    margin-bottom: 70px;
+    margin-right: 10px;
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#product_namebuycart {
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 50px;
+    width: content-box;
+    font-size: 12px;
+}
+
+#product_sizebuycart {
+    font-size: 13px;
+    margin-bottom: 5px;
+    margin-left: 50px;
+    color: dimgray;
+    min-width: 70px;
+}
+
+.product_sizeandname {
+    text-align: left;
+
+
+
+     /* Yeni özellik */
+}
+
+
+.footbuycart {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 20px;
+    justify-content: space-between;
+    display: flex;
+
+}
+
+
+#totalbuycart {
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.payment{
+    width: 53%;
+    position: absolute;
+
+}
+.payment #delivery{
+
+    width: 300px;
+    margin-right: 294px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: left;
+    font-size: 25px;
+    font-family: Cambria;
+}
+.stageonecount{
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    border-radius: 35px;
+    color: white;
+    background-color: black;
+    font-size: 20px;
+    margin-left: 15px;
+
+
+}
+.stagetwocount,.stagethreecount{
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    border-radius: 35px;
+    color: black;
+    border: 2px solid black;
+    background-color: white;
+    font-size: 20px;
+    margin-left: 15px;
+}
+.stageonetitle,.stagetwotitle{
+    margin-left: 9px;
+    padding-top: 5px;
+    font-size: 25px;
+    font-weight: bold;
+    width: 80px;
+    text-align: center;
+    font-family: "Bookman Old Style";
+
+}
+.stagethreetitle{
+    margin-left: 9px;
+    padding-top: 5px;
+    font-size: 25px;
+    font-weight: bold;
+    width: 95px;
+    text-align: center;
+    font-family: "Bookman Old Style";
+}
+.stageoneandtitle{
+    display: flex;
+    margin-top: 150px;
+
+}
+.stagetwoandtitle{
+    display: flex;
+    margin-top: 15px;
+}
+.stagethreeandtitle{
+    display: flex;
+    margin-top: 20px;
+}
+#stageonebutton,#stagethreebutton{
+    margin-top: 45px;
+    width: 605px;
+    height: 60px;
+    font-weight: bolder;
+
+}
+#stagetwobutton{
+    margin-top: 100px;
+    width: 605px;
+    height: 60px;
+    font-weight: bolder;
+}
+
+
+.form-check{
+    display: none;
+    margin-bottom: 50px;
+
+}
+.errors{
+    text-align: left;
+    padding-left: 3px;
+    font-size: 13px;
+    color: red;
+}
+#paymentcontainer{
+    padding-bottom: 12px;
+    display: none;
+}
+#creditcart{
+     width: 300px;
+    margin-right: 300px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: left;
+    font-size: 18px;
+    font-family: Calibri;
+}
+.alert-danger{
+    width: 500px;
+    height: 50px;
+    display: none;
+}
+.logo{
+    font-weight: bold;
+    border: 2px solid white;
+    padding-left: 62px;
+    padding-top: 12px;
+    background-color: ghostwhite;
+    width: 725px;
+}

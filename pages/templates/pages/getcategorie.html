@@ -1,0 +1,275 @@
+{% extends 'layout.html' %}
+{% block stylefile %}
+ <style>
+.card{
+    transition: all 0.5s;
+}
+    .card:hover{
+        transform: scale(1.15);
+    }
+
+</style>
+{% endblock %}
+{% block scripts %}
+    {% if topproducts %}
+<script>
+
+$(document).ready(function() {
+    // Listen for checkbox changes
+    $('input[type="checkbox"]').on('change', function() {
+        var brands = $('input[name="brands"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var colors = $('input[name="colors"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var bodysizes = $('input[name="bodysizes"]:checked').map(function() {
+            return this.value;
+        }).get();
+
+        // Change checkbox scroll to top start
+        window.scrollTo({top: 0, behavior: "smooth"});
+
+        // Call your view with AJAX
+        $.ajax({
+            url: {% block ajaxtopposturl %}{% endblock %},
+            method: 'POST',
+            data: {brandsjs: brands, colorsjs: colors,bodyjs:bodysizes,csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(data) {
+                var json = data
+                var topproducts = document.getElementById('topproducts');
+                var topproductcounter = document.getElementById('toplentotalproduct');
+                var topproductnotfound = document.getElementById('topproductnotfound');
+                topproducts.innerHTML = "";
+
+                if (json.filterproducts.length < 1) {
+                    topproductcounter.innerHTML = json.filterproducts.length.toString();
+                topproductnotfound.innerHTML = '<div style="width: 500px;font-size: 16px" class="alert alert-danger"  role="alert">Seçilen filtre özelliklerine uygun ürün bulunamadı.</div>';
+                } else {
+                    topproductcounter.innerHTML = json.filterproducts.length.toString();
+                    topproductnotfound.innerHTML = '';
+
+                 }
+
+                //JSON verilerini döngü ile gez
+
+                for (var i = 0; i < json.filterproducts.length; i++) {
+        var product = json.filterproducts[i];
+        var productHTML =
+
+        '<div id="topproducts-'+ product.id + '" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">'+
+    '<div class="card" style="width: 17rem;">'+
+            '<a href="'+json.categoriename+'/'+product.slug+'"><img style="height: 300px" src="/media/'+product.image+'" class="card-img-top" alt="..."></a>'+
+        '<div align="center" class="card-body">'+
+    '<h6 class="card-title">'+ product.name+'</h6>'+
+    '<p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">'+product.brand__brand+'</p>'+
+      '<p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺'+ product.price+'</p>'+
+  '</div>'+
+    '</div>'+
+'</div>';
+
+        topproducts.innerHTML += productHTML; // Ürün bilgilerini ekle
+
+    }
+
+
+
+                }
+
+        });
+    });
+});
+</script>
+
+    {% endif %}
+
+    {% if  subproducts %}
+<script>
+
+$(document).ready(function() {
+    // Listen for checkbox changes
+    $('input[type="checkbox"]').on('change', function() {
+        var brands = $('input[name="brands"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var colors = $('input[name="colors"]:checked').map(function() {
+            return this.value;
+        }).get();
+        var bodysizes = $('input[name="bodysizes"]:checked').map(function() {
+            return this.value;
+        }).get();
+
+        // Change checkbox scroll to top start
+        window.scrollTo({top: 0, behavior: "smooth"});
+
+        // Call your view with AJAX
+        $.ajax({
+            url: {% block ajaxsubposturl %}{% endblock %},
+            method: 'POST',
+            data: {brandsjs: brands, colorsjs: colors,bodyjs:bodysizes,csrfmiddlewaretoken: '{{ csrf_token }}'},
+            success: function(data) {
+                var json = data
+                var subproducts = document.getElementById('subproducts');
+                var subproductcounter = document.getElementById('sublentotalproduct');
+                var subproductnotfound = document.getElementById('subproductnotfound');
+                subproducts.innerHTML = "";
+
+                if (json.filterproducts.length < 1) {
+                    subproductcounter.innerHTML = json.filterproducts.length.toString();
+                subproductnotfound.innerHTML = '<div style="width: 500px;font-size: 16px" class="alert alert-danger"  role="alert">Seçilen filtre özelliklerine uygun ürün bulunamadı.</div>';
+                } else {
+                    subproductcounter.innerHTML = json.filterproducts.length.toString();
+                    subproductnotfound.innerHTML = '';
+
+                 }
+
+                //JSON verilerini döngü ile gez
+
+                for (var i = 0; i < json.filterproducts.length; i++) {
+        var product = json.filterproducts[i];
+        var productHTML =
+
+ '<div id="subproducts-'+ product.id + '" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">'+
+    '<div class="card" style="width: 17rem;">'+
+            '<a href="'+json.categoriename+'/'+product.slug+'"><img style="height: 300px" src="/media/'+product.image+'" class="card-img-top" alt="..."></a>'+
+        '<div align="center" class="card-body">'+
+    '<h6 class="card-title">'+ product.name+'</h6>'+
+    '<p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">'+product.brand__brand+'</p>'+
+      '<p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺'+ product.price+'</p>'+
+  '</div>'+
+    '</div>'+
+'</div>';
+
+        subproducts.innerHTML += productHTML; // Ürün bilgilerini ekle
+
+    }
+
+
+
+                }
+
+        });
+    });
+});
+</script>
+    {% endif %}
+{% if topproducts %}
+    <script>
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+  if (document.body.scrollTop > 140) {
+    document.getElementById("topfilterscroll").style.position = "fixed";
+    document.getElementById("topfilterscroll").style.top = "0";
+
+  }
+  else {
+      document.getElementById("topfilterscroll").style.position = "relative";
+    document.getElementById("topfilterscroll").style.top = "50";
+
+  }
+}
+</script>
+    {% elif subproducts %}
+     <script>
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+  if (document.body.scrollTop > 140) {
+    document.getElementById("subfilterscroll").style.position = "fixed";
+    document.getElementById("subfilterscroll").style.top = "0";
+
+  }
+  else {
+      document.getElementById("subfilterscroll").style.position = "relative";
+    document.getElementById("subfilterscroll").style.top = "50";
+
+  }
+}
+</script>
+    {% endif %}
+
+
+{% endblock %}
+
+{% block title %}
+    {% if subcategorie %}
+{% block gender1 %} {% endblock %} {{ subcategorie.categoriename }} Modelleri
+        {% else %}
+{% block gender2 %} {% endblock %}  {{ topcategorie.categoriename }} Modelleri
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+
+{% if  subcategorie %}
+
+    <h5 style="position: absolute;margin-left: 280px;margin-top: 100px">{% block gender3 %}{% endblock %}"{{ subcategorie.categoriename }}" kategorisinde toplamda <a id="sublentotalproduct">{{ subproducts|length }}</a> ürün bulundu.</h5>
+    <div style="position: absolute;margin-left: 280px;margin-top: 150px" id="subproductnotfound"> </div>
+    {% block subcategoriefilter %}
+
+    {% endblock %}
+
+
+
+    {% if subproducts%}
+        <div id="subproducts" style="margin-left: 225px;position:relative;top: 120px;">
+{% for product in subproducts %}
+<div id="subproducts-{{ product.id }}" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">
+  <div class="card" style="width: 17rem;">
+        {% block productdetailurl1 %}
+
+        {% endblock%}
+  <div align="center" class="card-body">
+    <h6 class="card-title">{{ product.name }}</h6>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{product.brand.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{product.price}}</p>
+  </div>
+    </div>
+</div>
+    {% endfor %}
+        </div>
+        <br><br><br><br><br><br><br><br>
+
+        {% endif %}
+
+
+    {% elif topcategorie %}
+
+    <h5 style="position: absolute;margin-left: 280px;margin-top: 100px">{% block gender4 %}{% endblock %}"{{ topcategorie.categoriename }}" kategorisinde toplamda <a id="toplentotalproduct">{{ topproducts|length }}</a> ürün bulundu.</h5>
+    <div style="position: absolute;margin-left: 280px;margin-top: 150px" id="topproductnotfound"> </div>
+    {% block topcategoriefilter %}
+
+    {% endblock %}
+
+
+
+    {% if topproducts%}
+        <div id="topproducts" style="margin-left: 225px;position:relative;top: 120px;">
+{% for product in topproducts %}
+<div id="topproducts-{{ product.id }}" style="display: inline-block;position:relative;margin-left: 50px;margin-top: 100px">
+  <div class="card" style="width: 17rem;">
+        {% block productdetailurl2 %}
+
+        {% endblock%}
+  <div align="center" class="card-body">
+    <h6 class="card-title">{{ product.name }}</h6>
+    <p class="card-text" style="font-family: SansSerif;color: lightslategray;font-size: 20px">{{product.brand.brand}}</p>
+      <p class="card-text" style="font-family: Roboto, sans-serif;font-weight: bold">₺{{product.price}}</p>
+  </div>
+    </div>
+</div>
+    {% endfor %}
+        </div>
+        <br><br><br><br><br><br><br><br>
+        {% endif %}
+{% endif %}
+
+
+
+
+<footer>
+
+</footer>
+
+{% endblock %}

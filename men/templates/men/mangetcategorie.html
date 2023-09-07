@@ -1,0 +1,107 @@
+{% extends 'pages/getcategorie.html' %}
+{% load static %}
+{% if topproducts %}
+{% block ajaxtopposturl %}'/erkek/{{categoriename}}'{% endblock %}
+{% endif %}
+{% if subproducts %}
+{% block ajaxsubposturl %}'/erkek/{{categoriename}}'{% endblock %}
+{% endif %}
+{% block productdetailurl1 %}
+ <a href="{% url "manproductdetail_get" categoriename product.slug %}"><img style="height: 300px" src="{{ product.image.url }}" class="card-img-top" alt="..."></a>
+{% endblock %}
+{% block productdetailurl2 %}
+ <a href="{% url "manproductdetail_get" categoriename product.slug %}"><img style="height: 300px"  src="{{ product.image.url }}" class="card-img-top" alt="..."></a>
+{% endblock %}
+{% block gender1 %}
+Erkek
+{% endblock %}
+{% block gender2 %}
+Erkek
+{% endblock %}
+{% block gender3 %}
+Erkek
+{% endblock %}
+{% block gender4 %}
+Erkek
+{% endblock %}
+{% if subcategorie %}
+
+{% block subcategoriefilter %}
+    <div id="subfilterscroll" style="float: left">
+    <form action="" method="post">
+    {% csrf_token %}
+    <h6>Marka</h6>
+    {% for brand in brandfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ brand }}" id="{{ brand }}" name="brands">
+  <label class="form-check-label" for="{{ brand }}">
+      {{ brand }}
+  </label>
+</div>
+    {% endfor %}
+    <hr>
+
+    <h6>Renk</h6>
+     {% for color in colorfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ color }}" id="{{ color }}" name="colors">
+  <label class="form-check-label" for="{{ color }}">
+      {{ color }}
+  </label>
+</div>
+         <hr>
+    {% endfor %}
+     <h6>Beden</h6>
+     {% for bodysize in bodyfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ bodysize }}" id="body-{{ bodysize }}" name="bodysizes">
+  <label class="form-check-label" for="body-{{ bodysize }}">
+      {{ bodysize }}
+  </label>
+</div>
+    {% endfor %}
+
+    </form>
+    </div>
+{% endblock %}
+
+    {% else %}
+    {% block topcategoriefilter %}
+        <div id="topfilterscroll" style="float: left">
+     <form action="" method="post">
+    {% csrf_token %}
+    <h6>Marka </h6>
+    {% for brand in brandfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ brand }}" id="{{ brand }}" name="brands">
+  <label class="form-check-label" for="{{ brand }}">
+      {{ brand }}
+  </label>
+</div>
+
+    {% endfor %}
+     <hr>
+    <h6>Renk</h6>
+     {% for color in colorfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ color }}" id="{{ color }}" name="colors">
+  <label class="form-check-label" for="{{ color }}">
+      {{ color }}
+  </label>
+</div>
+    {% endfor %}
+     <hr>
+     <h6>Beden</h6>
+     {% for bodysize in bodyfilter %}
+        <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{ bodysize }}" id="body-{{ bodysize }}" name="bodysizes">
+  <label class="form-check-label" for="body-{{ bodysize }}">
+      {{ bodysize }}
+  </label>
+</div>
+    {% endfor %}
+
+    </form>
+        </div>
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div align="center">
+    <form action="" method="post" novalidate>
+{% csrf_token %}
+    {% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+    {{ error }}
+{% endfor %}
+    {% endif %}
+        <div style="width: 500px;margin-top: 10px">
+<div>
+<h2 style="width: 500px;font-style: italic;margin-top: 50px">Kayıt Ol</h2>
+</div>
+
+    <label style="float: left;padding-left: 7px" for="{{ form.first_name.id_for_label }}">Ad</label>
+
+        <p>{{ form.first_name}}</p>
+
+        <div style="text-align: left" class="bg-danger">{{form.first_name.errors}}</div>
+    <label style="float: left;padding-left: 5px" for="{{ form.last_name.id_for_label }}">Soyad</label>
+        <div><p>{{ form.last_name}}</p></div>
+        <div style="text-align: left" class="bg-danger">{{form.last_name.errors}}</div>
+    <label style="float: left;padding-left: 5px" for="{{ form.email.id_for_label }}">E-Posta</label>
+        <p>{{ form.email}}</p>
+        <div style="text-align: left" class="bg-danger">{{form.email.errors}}</div>
+    <label style="float: left;padding-left: 5px" for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+        <p>{{ form.password1}}</p>
+        <div style="text-align: left" class="bg-danger">{{form.password1.errors}}</div>
+    <label style="float: left;padding-left: 5px" for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+        <p>{{ form.password2}}</p>
+        <div style="text-align: left" class="bg-danger">{{form.password2.errors}}</div>
+
+<div class="position-relative m-4">
+<button class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-dark rounded-pill" style="width: 400px;height: 50px;margin-top: 12px;font-size: 19px" type="submit">Kayıt Ol</button>
+</div>
+</div>
+
+</form>
+    </div>
+
+{% endblock %}
